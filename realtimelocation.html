@@ -1,0 +1,97 @@
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+<script>
+var options = {
+  enableHighAccuracy: true,
+  timeout: 1500,
+  maximumAge: 0
+};
+var map;
+var gmarkers = [];
+var i=0;
+function success(pos) { console.log(i);i++;
+  var crd = pos.coords; 
+  console.log('Your current position is:');
+  console.log('Latitude : ' + crd.latitude);
+  console.log('Longitude: ' + crd.longitude);
+  console.log('More or less ' + crd.accuracy + ' meters.');
+var position = parseFloat(crd.latitude) + ', ' + parseFloat(crd.longitude);
+removeMarkers();
+
+makeMarker(crd.latitude,crd.longitude);
+
+//removeMarkers(startinitlatLng) 
+
+};
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+navigator.geolocation.watchPosition(success, error, options);
+
+
+function initialize() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+
+  var mapOptions = {
+            zoom: 3,
+            center: myLatlng,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.SMALL,
+                position: google.maps.ControlPosition.RIGHT_TOP
+            },
+            panControl: true,
+            panControlOptions: {
+                position: google.maps.ControlPosition.RIGHT_TOP
+            }
+        }
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Hello World!'
+  });
+gmarkers.push(marker);
+}
+
+function makeMarker(lat,lng) { 
+        var myLatLng = new google.maps.LatLng(lat,lng);
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Hello World!'
+        });
+gmarkers.push(marker);
+    }
+
+function removeMarkers() {
+        for (i = 0; i < gmarkers.length; i++) {
+            gmarkers[i].setMap(null);
+        }
+    }
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+
+</script>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+ <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+    </style>
+
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
